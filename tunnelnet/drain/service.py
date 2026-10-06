@@ -96,6 +96,9 @@ class DrainService:
         with self._lock:
             self._cycles.append(cycle)
             self._state = "idle"
+            stop = getattr(self._pump, "stop", None)
+            if callable(stop):
+                stop()
         return cycle
 
     def cycles(self) -> list[DrainCycle]:
